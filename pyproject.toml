@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "rag-processing-hub"
+version = "0.1.0"
+description = ""
+authors = ["Kartikey gupta <kartikey071999@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"  # Recommended Python version
+fastapi = "^0.109.0" # Stable and widely used; avoid very latest for potential issues
+uvicorn = "^0.24.0" # Matches FastAPI version better for compatibility
+pydantic = "^2.4.0" # Very recent versions can introduce breaking changes.
+pydantic-settings = "^2.1.0" # Consistent with Pydantic
+sqlalchemy = "^2.0.23" # No need to go too bleeding edge unless you require new features
+asyncpg = "^0.28.0" # Generally matches SQLAlchemy and Python compatibility
+psycopg2-binary = "^2.9.6" # Matches asyncpg and Python compatibility
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
