@@ -6,6 +6,18 @@ from sqlalchemy.future import select
 from commons.enums import PlatformEnum
 from sqlalchemy.ext.asyncio import AsyncSession
 
+import asyncio
+import uuid
+from datetime import datetime
+
+from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
+from sqlalchemy.orm import sessionmaker
+from sqlmodel import SQLModel
+from database.schemas import Files
+from commons.enums import PlatformEnum, StatusEnum, Module
+from commons import constants
+
+
 
 class FileStatusRepository:
     def __init__(self, session: AsyncSession) -> None:
@@ -43,27 +55,17 @@ class FileStatusRepository:
 
         return file_record
 
-import asyncio
-import uuid
-from datetime import datetime
-
-from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
-from sqlalchemy.orm import sessionmaker
-from sqlmodel import SQLModel
-from database.schemas import Files
-from commons.enums import PlatformEnum, StatusEnum, Module
-from commons import constants
-
-
-# Create an asynchronous engine
-engine = create_async_engine(constants.ASYNC_DB_URL, echo=True)
-
-# Create a session factory
-AsyncSessionLocal = sessionmaker(bind=engine, class_=AsyncSession, expire_on_commit=False)
 
 async def main():
     """Main function to test FileStatusRepository"""
-    async with AsyncSessionLocal() as session:
+
+    # Create an asynchronous engine
+    engine = create_async_engine(constants.ASYNC_DB_URL, echo=True)
+
+    # Create a session factory
+    async_session_local = sessionmaker(bind=engine, class_=AsyncSession, expire_on_commit=False)
+
+    async with async_session_local() as session:
         repository = FileStatusRepository(session)
 
         # Create a new file record
