@@ -1,1 +1,5 @@
 # Dependencies
+sqlmodel>=0.0.22
+SQLAlchemy>=2.0.38
+python-dotenv>=1.0.1
+fastapi>=0.109.2
