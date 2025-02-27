@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 
 # Load environment variables from .env file
 load_dotenv()
+APP_VERSION = "local-dev"
 
 # sql Credentials
 DB_USER = os.getenv("DB_USER")
