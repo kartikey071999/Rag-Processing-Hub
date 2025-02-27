@@ -1,10 +1,7 @@
-from datetime import datetime
-import uuid
-from database.schemas import Files
+import logging
+
 from fastapi import HTTPException
 from sqlalchemy.future import select
-from commons.enums import PlatformEnum
-from sqlalchemy.ext.asyncio import AsyncSession
 
 import asyncio
 import uuid
@@ -12,11 +9,10 @@ from datetime import datetime
 
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.orm import sessionmaker
-from sqlmodel import SQLModel
-from database.schemas import Files
-from commons.enums import PlatformEnum, StatusEnum, Module
-from commons import constants
-
+from app.database.schemas import Files
+from app.commons.enums import PlatformEnum, StatusEnum, Module
+from app import constants
+import logging
 
 
 class FileStatusRepository:
@@ -34,7 +30,7 @@ class FileStatusRepository:
             self.session.add(file_status_record)
         return True
 
-    async def get_by_file_id(self, file_id: uuid.UUID, check_deleted: bool = True) -> Files:
+    async def get_by_file_by_file_id(self, file_id: uuid.UUID, check_deleted: bool = True) -> Files:
         """
         Fetches a record from FileStatus based on File ID.
 
@@ -43,6 +39,7 @@ class FileStatusRepository:
         :return: Files object.
         :raises HTTPException: If file is not found or deleted (when `check_deleted=True`).
         """
+        logging.info(f"Getting file with file id: {file_id}")
         query = select(Files).filter_by(file_id=str(file_id))
         result = await self.session.execute(query)
         file_record = result.scalar_one_or_none()
@@ -73,8 +70,7 @@ async def main():
         new_file = Files(
             filename_without_extension = "firsttest",
             file_extension = "kyg",
-            file_id=str(file_id),
-            file_name="test_file.txt",
+            file_id=file_id,
             uploaded_file_last_modified = datetime.utcnow(),
             file_status = StatusEnum.REQUESTED,
             current_process = Module.UPLOAD,
@@ -89,8 +85,8 @@ async def main():
 
         # Retrieve the inserted file
         try:
-            retrieved_file = await repository.get_by_file_id(file_id)
-            print(f"Retrieved File: {retrieved_file.file_name}")
+            retrieved_file = await repository.get_by_file_by_file_id(file_id)
+            print(f"Retrieved File: {retrieved_file.file_id}")
         except Exception as e:
             print(f"Error: {e}")
 

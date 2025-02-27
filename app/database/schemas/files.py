@@ -1,8 +1,10 @@
-from commons.enums import PlatformEnum, StatusEnum, Module
+import uuid
+
+from app.commons.enums import PlatformEnum, StatusEnum, Module
 from sqlmodel import SQLModel, Field, select
 from datetime import datetime
 from sqlalchemy.ext.asyncio import AsyncSession
-from database.sql_alchemy import compile_sql_or_scalar
+from app.database.schemas.utils import compile_sql_or_scalar
 
 
 class FilesBase(SQLModel):
@@ -47,7 +49,7 @@ class FilesBase(SQLModel):
 
 
 class Files(FilesBase, table=True):
-    file_id: str | None = Field(
+    file_id: uuid.UUID | None = Field(
         default=None, primary_key=True, description="File id stored as UUID"
     )
 

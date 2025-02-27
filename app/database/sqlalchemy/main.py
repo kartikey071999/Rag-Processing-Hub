@@ -2,9 +2,7 @@ import asyncio
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.orm import sessionmaker
 from sqlmodel import SQLModel
-from commons import constants
-from database.schemas import Files
-
+from app import constants
 
 
 async def create_tables():
